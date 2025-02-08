@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="h-screen w-screen bg-gray-600"> 
       <div className='p-4'>
-        <h1 className='text-white text-center font-extrabold text-3xl'>Memory game</h1>
+        <h1 className='text-white text-center font-extrabold text-3çxl'>Memory game</h1>
         <div className='text-white'>
           In this memory game, your objective is to select images that you haven’t previously chosen. 
           Each time you select an image, all images will shuffle to new positions. The goal is to remember 
