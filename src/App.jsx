@@ -1,10 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function App() {
 
   let cards = {1:'image 1', 2:'image 2', 3:'image 3',4:'image 4', 5:'image 5', 6:'image 6',7:'image 7', 8:'image 8', 9:'image 9',10:'image 10', 11:'image 11', 12:'image 12',}
 
   let clickedCard = new Set();
+
+  const [imageURLs, setImageURLs] = useState([]);
+
+  useEffect(()=>{
+    const newImageURLs = Object.keys(cards).map(() => {
+      return `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 100000)}`;
+    });
+    setImageURLs(newImageURLs);
+  },[]);
+
 
   let handleCardClick = (key) => {
     if (clickedCard.has(key) ){
@@ -27,11 +37,16 @@ function App() {
         </div>
       </div>
       <div className="grid grid-cols-3 sm:grid-cols-4 h-[80vh]">
-       {Object.entries(cards).map(([key, card]) => (
+       {Object.entries(cards).map(([key, card], index) => (
          <div 
           key={key} 
           className="border-2 border-black outline-4 bg-pink-500 m-4 hover:bg-sky-700" 
           onClick={()=> handleCardClick(key)}
+          style={{
+            backgroundImage: `url(${imageURLs[index]})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
          >
             {`Content for div ${card}`}
          </div>
