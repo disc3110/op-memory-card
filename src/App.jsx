@@ -7,6 +7,7 @@ function App() {
     const [clickedCards, setClickedCards] = useState([]);
     const [imageURLs, setImageURLs] = useState([]);
     const [shuffledCards, setShuffledCards] = useState(Object.entries(cards));
+    const [gameOver, setGameOver] = useState(false);  // Track when the user loses
 
     useEffect(() => {
         const newImageURLs = Object.keys(cards).map(() => 
@@ -17,13 +18,20 @@ function App() {
 
     let handleCardClick = (key) => {
         if (clickedCards.includes(key)) {
-            setClickedCards([]);
+            setGameOver(true);  // Show "Game Over" modal
         } else {
             setClickedCards(prevSet => [...prevSet, key]);
 
             // Shuffle cards after each click
             setShuffledCards(prevCards => [...prevCards].sort(() => Math.random() - 0.5));
         }
+    };
+
+    // Function to restart the game
+    let restartGame = () => {
+        setClickedCards([]);
+        setGameOver(false);
+        setShuffledCards(Object.entries(cards).sort(() => Math.random() - 0.5));
     };
 
     return (
@@ -36,10 +44,11 @@ function App() {
                     which images you’ve already selected and avoid selecting them again. The game continues until all images 
                     have been selected once. Challenge your memory and see how accurately you can recall your previous choices!
                 </div>
-                <div className='text-white'>
-                    {`Score: ${clickedCards.length}/12`}
+                <div className='text-white text-center font-medium'>
+                    {`SCORE: ${clickedCards.length}/12`}
                 </div>
             </div>
+
             <div className="grid grid-cols-3 sm:grid-cols-4 h-[80vh]">
                 {shuffledCards.map(([key, card], index) => (
                     <div 
@@ -52,10 +61,24 @@ function App() {
                             backgroundPosition: 'center',
                         }}
                     >
-                        {`Content for div ${card}`}
                     </div>
                 ))}
             </div>
+
+            {gameOver && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <h2 className="text-2xl font-bold text-red-600">Game Over!</h2>
+                        <p className="text-gray-800 mt-2">You clicked the same card twice!</p>
+                        <button 
+                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            onClick={restartGame}
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
